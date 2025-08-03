@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: nodered-secure
+    env: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TOTP_SECRET
+        generateValue: true

@@ -1,0 +1,17 @@
+name: nodered-secure
+type: web
+docker:
+  image: your-docker-hub-username/nodered-secure:latest
+ports:
+  - port: 8000
+    protocol: http
+env:
+  - key: ADMIN_PASSWORD
+    value: "@your-admin-password"
+  - key: SESSION_SECRET
+    value: "@your-session-secret"
+  - key: TOTP_SECRET
+    value: "@your-totp-secret"
+instance_type: free
+regions:
+  - fra

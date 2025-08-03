@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup 2FA - Node-RED</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; text-align: center; }
+        .setup-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        img { margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <h1>Setup Two-Factor Authentication</h1>
+        <p>Scan the QR code below with your authenticator app (e.g., Google Authenticator, Authy).</p>
+        <img src="<%= qrCodeUrl %>" alt="QR Code">
+        <p>After scanning, use the generated token to log in.</p>
+        <a href="/login">Back to Login</a>
+    </div>
+</body>
+</html>

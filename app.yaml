@@ -1,0 +1,30 @@
+runtime: nodejs
+env: flex
+
+# This is a basic configuration. You may need to adjust it based on your specific needs.
+# For example, you might want to configure the instance class, scaling, etc.
+# See the App Engine documentation for more details:
+# https://cloud.google.com/appengine/docs/flexible/nodejs/configuring-your-app-with-app-yaml
+
+# The 'F1' instance class is the default, but it's not recommended for this setup.
+# You should use a larger instance class for better performance.
+# For example, you can use 'F2' or 'F4'.
+# resources:
+#   cpu: 2
+#   memory_gb: 4
+
+# You can set environment variables in this file or in the Google Cloud Console.
+# It's recommended to use the Cloud Console for sensitive data like passwords and secrets.
+env_variables:
+  NODE_ENV: 'production'
+  # ADMIN_PASSWORD: 'your_admin_password'
+  # SESSION_SECRET: 'your_session_secret'
+  # TOTP_SECRET: 'your_totp_secret'
+
+handlers:
+- url: /.*
+  script: this field is required, but ignored
+  secure: always
+
+# The App Engine Flexible Environment uses a Docker container to run your app.
+# The 'gcloud app deploy' command will automatically build the Docker image for you.
