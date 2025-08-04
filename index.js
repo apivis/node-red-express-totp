@@ -83,6 +83,10 @@ function isAuthenticated(req, res, next) {
 app.use('/red', isAuthenticated);
 
 // --- Routes ---
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
 app.get('/login', (req, res) => {
     res.render('login', { error: null });
 });
