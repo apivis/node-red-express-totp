@@ -56,8 +56,15 @@ const settings = {
 
 // --- TOTP and Password Configuration ---
 const adminPassword = process.env.ADMIN_PASSWORD || 'password';
-let totpSecret = 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ'; // Use a fixed secret for debugging
+let totpSecret = process.env.TOTP_SECRET;
 let qrCodeUrl = '';
+
+if (!totpSecret) {
+    // Generate a new secret
+    const secret = Buffer.from(Array.from({ length: 20 }, () => Math.floor(Math.random() * 256)));
+    totpSecret = thirtyTwo.encode(secret).toString('utf8');
+    process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
+}
 
 const otpauth_url = `otpauth://totp/Node-RED?secret=${totpSecret}&issuer=Node-RED`;
 
@@ -95,7 +102,7 @@ app.post('/login', async (req, res) => {
     console.log('  - Password provided:', password ? 'Yes' : 'No');
     console.log('  - Token provided:', token);
 
-    const isPasswordValid = (password === adminPassword);
+    const isPasswordValid = await bcrypt.compare(password, await bcrypt.hash(adminPassword, 10));
     console.log('  - Password validation result:', isPasswordValid);
 
     if (!isPasswordValid) {
