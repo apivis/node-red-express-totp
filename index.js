@@ -56,14 +56,8 @@ const settings = {
 
 // --- TOTP and Password Configuration ---
 const adminPassword = process.env.ADMIN_PASSWORD || 'password';
-let totpSecret = process.env.TOTP_SECRET;
+let totpSecret = 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ'; // Use a fixed secret for debugging
 let qrCodeUrl = '';
-
-if (!totpSecret) {
-    // Use a fixed secret for debugging
-    totpSecret = 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ';
-    process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
-}
 
 const otpauth_url = `otpauth://totp/Node-RED?secret=${totpSecret}&issuer=Node-RED`;
 
