@@ -95,6 +95,25 @@ This project is configured for deployment on the Google App Engine Flexible Envi
 
 ### Koyeb
 
+You can deploy this project on Koyeb using either the CLI or the web dashboard.
+
+#### Deploying with the Koyeb Dashboard
+
+1.  **Create a new App on the Koyeb dashboard.**
+2.  **Choose "GitHub" as the deployment method.**
+3.  **Select your repository.**
+4.  **Configure the Service:**
+    *   **Service type:** `Web Service`
+    *   **Docker image:** Leave this blank if you are deploying from a Git repository. Koyeb will automatically build the Docker image from the `Dockerfile` in your repository.
+    *   **Ports:** Set the port to `8000`.
+    *   **Environment variables:**
+        *   `ADMIN_PASSWORD`: Your desired admin password.
+        *   `SESSION_SECRET`: A long, random string for session management.
+        *   `TOTP_SECRET`: A long, random string for the TOTP secret.
+5.  **Click "Deploy".**
+
+#### Deploying with the Koyeb CLI
+
 This project can be deployed on Koyeb using the provided `koyeb.yaml` file.
 
 1.  **Install the Koyeb CLI:**
@@ -112,4 +131,4 @@ This project can be deployed on Koyeb using the provided `koyeb.yaml` file.
     koyeb service deploy -f koyeb.yaml
     ```
 
-    You will need to replace `your-docker-hub-username/nodered-secure:latest` in `koyeb.yaml` with the actual path to your Docker image.
+    You will need to replace `your-docker-hub-username/nodered-secure:latest` in `koyeb.yaml` with the actual path to your Docker image if you are not deploying from a Git repository.
