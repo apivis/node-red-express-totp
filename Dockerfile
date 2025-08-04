@@ -1,11 +1,11 @@
 # Use an official Node.js runtime as a parent image
-FROM node:18-slim
+FROM node:20-slim
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
 # Install Node-RED globally
-RUN npm install -g --unsafe-perm node-red
+RUN npm install -g --unsafe-perm node-red@latest
 
 # Copy package.json and package-lock.json
 COPY package*.json ./

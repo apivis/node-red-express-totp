@@ -6,7 +6,7 @@ services:
     healthCheckPath: /
     envVars:
       - key: NODE_VERSION
-        value: 18
+        value: 20
       - key: ADMIN_PASSWORD
         generateValue: true
       - key: SESSION_SECRET
