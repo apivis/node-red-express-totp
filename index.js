@@ -100,18 +100,25 @@ app.get('/login', (req, res) => {
 app.post('/login', async (req, res) => {
     const { password, token } = req.body;
 
+    console.log('Login attempt:');
+    console.log('  - Password provided:', password ? 'Yes' : 'No');
+    console.log('  - Token provided:', token);
+
     const isPasswordValid = await bcrypt.compare(password, await bcrypt.hash(adminPassword, 10));
+    console.log('  - Password validation result:', isPasswordValid);
 
     if (!isPasswordValid) {
         return res.render('login', { error: 'Invalid password or TOTP token.' });
     }
 
+    console.log('  - Verifying TOTP with secret:', totpSecret);
     const verified = speakeasy.totp.verify({
         secret: totpSecret,
         encoding: 'base32',
         token: token,
         window: 1
     });
+    console.log('  - TOTP verification result:', verified);
 
     if (verified) {
         req.session.isAuthenticated = true;
