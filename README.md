@@ -109,7 +109,7 @@ You can deploy this project on Koyeb using either the CLI or the web dashboard.
     *   **Environment variables:**
         *   `ADMIN_PASSWORD`: Your desired admin password.
         *   `SESSION_SECRET`: A long, random string for session management.
-        *   `TOTP_SECRET`: A long, random string for the TOTP secret.
+        *   `TOTP_SECRET`: A valid Base32 string for the TOTP secret. You can use the following value: `GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ`
 5.  **Click "Deploy".**
 
 #### Deploying with the Koyeb CLI
