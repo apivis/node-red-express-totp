@@ -3,7 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const RED = require('node-red');
 const bcrypt = require('bcrypt');
-const speakeasy = require('speakeasy');
+const notp = require('notp');
+const thirtyTwo = require('thirty-two');
 const qrcode = require('qrcode');
 const bodyParser = require('body-parser');
 
@@ -59,18 +60,13 @@ let totpSecret = process.env.TOTP_SECRET;
 let qrCodeUrl = '';
 
 if (!totpSecret) {
-    const secret = speakeasy.generateSecret({ length: 20 });
-    totpSecret = secret.base32;
+    // Generate a new secret
+    const secret = Buffer.from(Array.from({ length: 20 }, () => Math.floor(Math.random() * 256)));
+    totpSecret = thirtyTwo.encode(secret).toString('utf8');
     process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
 }
-// Ensure the secret is valid Base32
-totpSecret = totpSecret.replace(/[^A-Z2-7=]/g, '');
 
-const otpauth_url = speakeasy.otpauthURL({
-    secret: totpSecret,
-    label: 'Node-RED',
-    issuer: 'Node-RED'
-});
+const otpauth_url = `otpauth://totp/Node-RED?secret=${totpSecret}&issuer=Node-RED`;
 
 qrcode.toDataURL(otpauth_url, (err, data_url) => {
     if (err) {
@@ -114,11 +110,9 @@ app.post('/login', async (req, res) => {
     }
 
     console.log('  - Verifying TOTP with secret:', totpSecret);
-    const verified = speakeasy.totp.verify({
-        secret: totpSecret,
-        encoding: 'base32',
-        token: token,
-        window: 6 // Increased window to account for time drift
+    const verified = notp.totp.verify(token, thirtyTwo.decode(totpSecret), {
+        window: 6,
+        time: 30
     });
     console.log('  - TOTP verification result:', verified);
 
