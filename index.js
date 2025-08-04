@@ -60,9 +60,8 @@ let totpSecret = process.env.TOTP_SECRET;
 let qrCodeUrl = '';
 
 if (!totpSecret) {
-    // Generate a new secret
-    const secret = Buffer.from(Array.from({ length: 20 }, () => Math.floor(Math.random() * 256)));
-    totpSecret = thirtyTwo.encode(secret).toString('utf8');
+    // Use a fixed secret for debugging
+    totpSecret = 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ';
     process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
 }
 
