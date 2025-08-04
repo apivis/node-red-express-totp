@@ -13,7 +13,7 @@ This setup enhances the security of Node-RED by:
 - **Embedding Node-RED in an Express.js application:** This allows for a custom authentication layer in front of the Node-RED editor.
 - **Password and TOTP Authentication:** The login process requires both a password and a Time-based One-Time Password (TOTP) from an authenticator app.
 - **Secure Session Management:** Express-session is used to manage user login sessions.
-- **First-Time QR Code Setup:** On the first login, a QR code is displayed for easy setup of the TOTP in an authenticator app like Google Authenticator or Authy.
+- **2FA Setup:** You can set up or re-sync your authenticator app at any time by visiting the `/setup-2fa` page.
 
 ## How to Run Locally
 
@@ -43,7 +43,7 @@ This setup enhances the security of Node-RED by:
 5.  **Access the application:**
     -   Login page: `http://localhost:8000/login`
     -   Node-RED editor: `http://localhost:8000/red`
-    -   First-time 2FA setup: `http://localhost:8000/setup-2fa`
+-   2FA setup: `http://localhost:8000/setup-2fa`
 
 ## Deployment
 
@@ -55,6 +55,9 @@ This project is configured for deployment on Render using the `render.yaml` file
 2.  Connect your GitHub repository.
 3.  Render will automatically detect the `render.yaml` file and configure the service.
 4.  The environment variables (`ADMIN_PASSWORD`, `SESSION_SECRET`, `TOTP_SECRET`) will be generated automatically. You can view and manage them in the Render dashboard.
+
+**Important Note on TOTP:**
+On the first deployment, a `TOTP_SECRET` will be generated and stored as an environment variable. You will need to use this secret to set up your authenticator app. You can set up or re-sync your authenticator app at any time by visiting the `/setup-2fa` page.
 
 ### Google App Engine
 

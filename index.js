@@ -61,16 +61,22 @@ let qrCodeUrl = '';
 if (!totpSecret) {
     const secret = speakeasy.generateSecret({ length: 20 });
     totpSecret = secret.base32;
-    qrcode.toDataURL(secret.otpauth_url, (err, data_url) => {
-        if (err) {
-            console.error('Error generating QR code:', err);
-        } else {
-            qrCodeUrl = data_url;
-            console.log('TOTP Secret:', totpSecret);
-            console.log('Scan the QR code with your authenticator app.');
-        }
-    });
+    process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
 }
+
+const otpauth_url = speakeasy.otpauthURL({
+    secret: totpSecret,
+    label: 'Node-RED',
+    issuer: 'Node-RED'
+});
+
+qrcode.toDataURL(otpauth_url, (err, data_url) => {
+    if (err) {
+        console.error('Error generating QR code:', err);
+    } else {
+        qrCodeUrl = data_url;
+    }
+});
 
 // --- Middleware to Protect Node-RED Routes ---
 function isAuthenticated(req, res, next) {
@@ -100,45 +106,23 @@ app.post('/login', async (req, res) => {
         return res.render('login', { error: 'Invalid password or TOTP token.' });
     }
 
-    if (qrCodeUrl) { // First time login
-        const verified = speakeasy.totp.verify({
-            secret: totpSecret,
-            encoding: 'base32',
-            token: token,
-            window: 1
-        });
+    const verified = speakeasy.totp.verify({
+        secret: totpSecret,
+        encoding: 'base32',
+        token: token,
+        window: 1
+    });
 
-        if (verified) {
-            req.session.isAuthenticated = true;
-            qrCodeUrl = ''; // Clear the QR code URL after successful setup
-            process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
-            return res.redirect('/red');
-        } else {
-            return res.render('login', { error: 'Invalid TOTP token.' });
-        }
-    } else { // Subsequent logins
-        const verified = speakeasy.totp.verify({
-            secret: totpSecret,
-            encoding: 'base32',
-            token: token,
-            window: 1
-        });
-
-        if (verified) {
-            req.session.isAuthenticated = true;
-            return res.redirect('/red');
-        } else {
-            return res.render('login', { error: 'Invalid TOTP token.' });
-        }
+    if (verified) {
+        req.session.isAuthenticated = true;
+        return res.redirect('/red');
+    } else {
+        return res.render('login', { error: 'Invalid TOTP token.' });
     }
 });
 
 app.get('/setup-2fa', (req, res) => {
-    if (qrCodeUrl) {
-        res.render('setup-2fa', { qrCodeUrl: qrCodeUrl });
-    } else {
-        res.redirect('/login');
-    }
+    res.render('setup-2fa', { qrCodeUrl: qrCodeUrl });
 });
 
 app.get('/logout', (req, res) => {
