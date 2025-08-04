@@ -62,7 +62,7 @@ let qrCodeUrl = '';
 if (!totpSecret) {
     // Generate a new secret
     const secret = Buffer.from(Array.from({ length: 20 }, () => Math.floor(Math.random() * 256)));
-    totpSecret = thirtyTwo.encode(secret).toString('utf8');
+    totpSecret = thirtyTwo.encode(secret).toString('utf8').replace(/=/g, '');
     process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
 }
 
@@ -137,6 +137,7 @@ app.get('/logout', (req, res) => {
 // --- Server Initialization ---
 const server = http.createServer(app);
 RED.init(server, settings);
+RED.start();
 app.use(settings.httpAdminRoot, RED.httpAdmin);
 app.use(settings.httpNodeRoot, RED.httpNode);
 
