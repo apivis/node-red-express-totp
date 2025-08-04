@@ -8,12 +8,31 @@ Node-RED is a programming tool for wiring together hardware devices, APIs, and o
 
 ## Security Setup
 
-This setup enhances the security of Node-RED by:
+This setup provides a robust security layer for your Node-RED instance. Here's a breakdown of the security measures in place:
 
-- **Embedding Node-RED in an Express.js application:** This allows for a custom authentication layer in front of the Node-RED editor.
-- **Password and TOTP Authentication:** The login process requires both a password and a Time-based One-Time Password (TOTP) from an authenticator app.
-- **Secure Session Management:** Express-session is used to manage user login sessions.
-- **2FA Setup:** You can set up or re-sync your authenticator app at any time by visiting the `/setup-2fa` page.
+- **Two-Factor Authentication (2FA) with TOTP:** This is the most significant security enhancement. By requiring a time-based one-time password from your authenticator app, we've added a second layer of security beyond just a password. This makes it much more difficult for an unauthorized user to gain access, even if they manage to steal your password.
+
+- **Password Hashing with `bcrypt`:** We are using `bcrypt` to securely hash the admin password. This means that the actual password is never stored in the application or its environment variables. Instead, we store a cryptographic hash of the password. When you log in, the password you provide is hashed and then compared to the stored hash. This prevents anyone from being able to read the password, even if they gain access to the server.
+
+- **Secure Session Management:** We are using `express-session` to manage user login sessions. This library implements secure session management practices, such as using signed cookies to prevent session hijacking.
+
+- **Protection of Node-RED Routes:** The Node-RED editor and API are protected by the Express authentication middleware. This ensures that no one can access the Node-RED editor or its APIs without first authenticating through the Express login page.
+
+- **Disabled Node-RED Admin Auth:** By disabling Node-RED's built-in authentication, we have a single, centralized authentication system. This reduces the complexity of the security setup and makes it easier to manage.
+
+### Further Security Considerations
+
+While this setup is quite secure, there are always further steps you can take to enhance security:
+
+- **Use a Strong, Unique Password:** The security of the entire system still relies on the strength of your admin password. Make sure to use a long, complex, and unique password.
+
+- **Securely Manage Environment Variables:** On platforms like Render, environment variables are stored securely. However, you should always be mindful of who has access to your Render account.
+
+- **Implement Rate Limiting:** To protect against brute-force attacks, you could implement rate limiting on the login route. This would prevent an attacker from being able to make a large number of login attempts in a short period of time. Libraries like `express-rate-limit` can be used for this.
+
+- **Enable HTTPS:** While Render automatically provides HTTPS for your application, if you were to deploy this on a different platform, you would need to ensure that HTTPS is enabled to encrypt the traffic between the user's browser and the server.
+
+- **Regularly Update Dependencies:** It's important to keep your application's dependencies up to date to protect against any security vulnerabilities that may be discovered in them. You can use tools like `npm audit` to check for vulnerabilities.
 
 ## How to Run Locally
 
