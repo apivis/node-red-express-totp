@@ -150,10 +150,10 @@ app.use(settings.httpAdminRoot, RED.httpAdmin);
 app.use(settings.httpNodeRoot, RED.httpNode);
 
 const PORT = process.env.PORT || 8000;
-server.listen(PORT, () => {
-    console.log(`Server listening on http://localhost:${PORT}`);
-    console.log(`Node-RED admin available at http://localhost:${PORT}${settings.httpAdminRoot}`);
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server listening on http://0.0.0.0:${PORT}`);
+    console.log(`Node-RED admin available at http://0.0.0.0:${PORT}${settings.httpAdminRoot}`);
     if (qrCodeUrl) {
-        console.log(`Setup 2FA at http://localhost:${PORT}/setup-2fa`);
+        console.log(`Setup 2FA at http://0.0.0.0:${PORT}/setup-2fa`);
     }
 });
