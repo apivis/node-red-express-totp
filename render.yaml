@@ -11,5 +11,3 @@ services:
         generateValue: true
       - key: SESSION_SECRET
         generateValue: true
-      - key: TOTP_SECRET
-        generateValue: true
