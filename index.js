@@ -106,7 +106,7 @@ app.post('/login', async (req, res) => {
     console.log('  - Password provided:', password ? 'Yes' : 'No');
     console.log('  - Token provided:', token);
 
-    const isPasswordValid = await bcrypt.compare(password, await bcrypt.hash(adminPassword, 10));
+    const isPasswordValid = (password === adminPassword);
     console.log('  - Password validation result:', isPasswordValid);
 
     if (!isPasswordValid) {
