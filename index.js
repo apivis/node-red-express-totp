@@ -33,25 +33,7 @@ const settings = {
             enabled: false
         }
     },
-    adminAuth: {
-        type: "credentials",
-        users: [{
-            username: "admin",
-            permissions: "*"
-        }],
-        authenticate: function(username, password) {
-            return new Promise(function(resolve) {
-                // This is a dummy authentication function.
-                // The actual authentication is handled by the Express app.
-                // We resolve with a dummy user to allow the Node-RED editor to load.
-                if (username === "admin") {
-                    resolve({ username: "admin", permissions: "*" });
-                } else {
-                    resolve(null);
-                }
-            });
-        }
-    }
+    adminAuth: undefined
 };
 
 // --- TOTP and Password Configuration ---
