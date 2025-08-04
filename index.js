@@ -118,7 +118,7 @@ app.post('/login', async (req, res) => {
         secret: totpSecret,
         encoding: 'base32',
         token: token,
-        window: 1
+        window: 6 // Increased window to account for time drift
     });
     console.log('  - TOTP verification result:', verified);
 
