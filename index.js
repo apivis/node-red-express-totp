@@ -63,6 +63,8 @@ if (!totpSecret) {
     totpSecret = secret.base32;
     process.env.TOTP_SECRET = totpSecret; // Store the secret for future use
 }
+// Ensure the secret is valid Base32
+totpSecret = totpSecret.replace(/[^A-Z2-7=]/g, '');
 
 const otpauth_url = speakeasy.otpauthURL({
     secret: totpSecret,
